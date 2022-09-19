@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <color name="color">#FF3A3A3A</color>
+    <string name="app_name">Hat</string>
 </resources>

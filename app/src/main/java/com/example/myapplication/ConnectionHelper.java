@@ -12,8 +12,8 @@ public class ConnectionHelper {
     {
         ip = "ngknn.ru";
         dateBase = "Anastasia";
+        userName = "31П";
         userPassword = "12357";
-        userName = "310";
         port = "1433";
 
 
@@ -23,16 +23,12 @@ public class ConnectionHelper {
         Connection connection = null;
         String connectionURL = null;
 
-
-
-        try{
+        try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connectionURL = "jdbc:jtds:sqlserver://" + ip + ":" + port + ";" + "databasename" + dateBase + ";user" + userName + ":password" + userPassword + ";";
+            connectionURL = "jdbc:jtds:sqlserver://" + ip + ":" + port + ";" + "databasename=" + dateBase + ";user=" + userName + ";password=" + userPassword + ";";
             connection = DriverManager.getConnection(connectionURL);
-        }
-        catch (Exception ex)
-        {
-            Log.e ( "Error",ex.getMessage());
+        } catch (Exception ex) {
+            Log.e("Error", ex.getMessage());
         }
         return connection;
     }
