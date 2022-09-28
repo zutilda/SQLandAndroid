@@ -54,10 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(query);
 
-                Toast.makeText(this, "Запись успешно добавлена", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Запись добавлена", Toast.LENGTH_LONG).show();
 
             } else {
-                Toast.makeText(this, "Проверьте подключение!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Проверьте подключение", Toast.LENGTH_LONG).show();
             }
         } catch (Exception ex) {
             Toast.makeText(this, "Ошибка!", Toast.LENGTH_LONG).show();

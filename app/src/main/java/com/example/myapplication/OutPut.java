@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.Parcel;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -16,7 +18,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class OutPut extends AppCompatActivity implements View.OnClickListener {
+public class OutPut extends AppCompatActivity implements View.OnClickListener  {
 
     Button buttonBackPage;
     Button buttonOutput;
@@ -28,8 +30,9 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_out_put);
         buttonBackPage =findViewById(R.id.buttonBackPage);
-
-        buttonOutput =findViewById(R.id.buttonOutput);   }
+        buttonOutput =findViewById(R.id.buttonOutput);
+        GetDataBase();
+    }
 
     @Override
     public void onClick(View view) {
@@ -40,13 +43,13 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener {
                 startActivity(new Intent(this,MainActivity.class));
                 break;
             case R.id.buttonOutput:
-                GetTextFormSql();
+                GetDataBase();
                 break;
 
         }
     }
 
-    public void GetTextFormSql() {
+    public void GetDataBase() {
 
         try {
 
@@ -98,5 +101,56 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener {
             Toast.makeText(this, "Ошибка!", Toast.LENGTH_LONG).show();
         }
     }
+
+    /* //открытие
+        imageView.setOnClickListener(v -> {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        pickImg.launch(intent);        });
+
+
+    //отдельный метод для открытия
+    private final ActivityResultLauncher<Intent> pickImg = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK) {
+            if (result.getData() != null) {
+                Uri uri = result.getData().getData();
+                try {
+                    InputStream is = getContentResolver().openInputStream(uri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(is);
+                    imageView.setImageBitmap(bitmap);
+                    encodedImage = encodeImage(bitmap);
+                } catch (Exception e) {
+
+                }
+            }
+        }
+    });
+
+    //Из строки в изображение
+    private Bitmap getImgBitmap(String encodedImg) {
+        if (encodedImg != null) {
+            byte[] bytes = new byte[0];
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                bytes = Base64.getDecoder().decode(encodedImg);
+            }
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        return BitmapFactory.decodeResource(DeteilsMask.this.getResources(),
+                R.drawable.picture);
+    }
+
+    //Изображение в строку
+    private String encodeImage(Bitmap bitmap) {
+        int prevW = 150;
+        int prevH = bitmap.getHeight() * prevW / bitmap.getWidth();
+        Bitmap b = Bitmap.createScaledBitmap(bitmap, prevW, prevH, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        b.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return Base64.getEncoder().encodeToString(bytes);
+        }
+        return "";
+    } */
 
 }
