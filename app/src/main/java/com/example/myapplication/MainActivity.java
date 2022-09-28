@@ -67,11 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void EditRow() {
 
-    /*    TextView id = (TextView) findViewById(R.id.id);
-        id.setText(listItem.getId()+"");
-        id.setOnClickListener(this); */
-
-        try {
+           try {
 
             ConnectionHelper ConnectionHelper = new ConnectionHelper();
             connection = ConnectionHelper.connectionClass();
