@@ -31,7 +31,7 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
         setContentView(R.layout.activity_out_put);
         buttonBackPage =findViewById(R.id.buttonBackPage);
         buttonOutput =findViewById(R.id.buttonOutput);
-        GetDataBase();
+        GetTable();
     }
 
     @Override
@@ -43,13 +43,13 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
                 startActivity(new Intent(this,MainActivity.class));
                 break;
             case R.id.buttonOutput:
-                GetDataBase();
+                GetTable();
                 break;
 
         }
     }
 
-    public void GetDataBase() {
+    public void GetTable() {
 
         try {
 

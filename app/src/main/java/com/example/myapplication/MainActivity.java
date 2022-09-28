@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         txtColor =findViewById(R.id.txtColor);
         txtCost =findViewById(R.id.txtCost);
         buttonAdd =findViewById(R.id.buttonAdd);
+        EditRow();
     }
 
     @Override
@@ -55,6 +57,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 statement.executeUpdate(query);
 
                 Toast.makeText(this, "Запись добавлена", Toast.LENGTH_LONG).show();
+
+            } else {
+                Toast.makeText(this, "Проверьте подключение", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception ex) {
+            Toast.makeText(this, "Ошибка!", Toast.LENGTH_LONG).show();
+        }
+    }
+    public void EditRow() {
+
+    /*    TextView id = (TextView) findViewById(R.id.id);
+        id.setText(listItem.getId()+"");
+        id.setOnClickListener(this); */
+
+        try {
+
+            ConnectionHelper ConnectionHelper = new ConnectionHelper();
+            connection = ConnectionHelper.connectionClass();
+
+            if (connection != null) {
+                String query = "UPDATE Hat SET title='"+(txtTitle.getText().toString())+"', color='"+ txtColor.getText().toString()+"', cost='"+txtCost.getText().toString()+"' WHERE id= ;";
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(query);
+
+                Toast.makeText(this, "Запись изменена", Toast.LENGTH_LONG).show();
 
             } else {
                 Toast.makeText(this, "Проверьте подключение", Toast.LENGTH_LONG).show();
