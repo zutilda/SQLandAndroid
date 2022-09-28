@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -16,6 +17,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class OutPut extends AppCompatActivity implements View.OnClickListener {
+
+    Button buttonBackPage;
+    Button buttonOutput;
     Connection connection;
     String ConnectionResult;
 
@@ -23,10 +27,11 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_out_put);
+        buttonBackPage =findViewById(R.id.buttonBackPage);
 
+        buttonOutput =findViewById(R.id.buttonOutput);   }
 
-    }
-   @Override
+    @Override
     public void onClick(View view) {
 
         switch (view.getId()){
