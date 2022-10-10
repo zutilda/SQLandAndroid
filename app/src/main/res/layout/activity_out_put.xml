@@ -6,40 +6,64 @@
     android:layout_height="match_parent"
     tools:context=".OutPut">
 
-    <TableLayout
-        android:id="@+id/tableOutput"
-        android:layout_width="410dp"
-        android:layout_height="467dp"
+    <EditText
+        android:id="@+id/searchHat"
+        android:layout_width="239dp"
+        android:layout_height="35dp"
+        android:digits="abcdefghijklmnopqrstuvwxyz1234567890 йфяцычувскамепинртгоьшлбщдюзжхэъWERTYUIOPLKJHGFDSAZXCVBNM-"
+        android:ems="10"
+        android:textSize="14dp"
+        android:hint="Поиск"
+        android:maxLength="10"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="237dp" />
+    <ScrollView
+        android:id="@+id/scroleOutput"
+        android:layout_width="401dp"
+        android:layout_height="356dp"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <TableLayout
+            android:id="@+id/tableOutput"
+            android:layout_width="400dp"
+            android:layout_height="416dp"
+            android:layout_marginTop="8dp"
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:isScrollContainer="true"
+            android:padding="10dip">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </TableLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/buttonOutput"
         android:layout_width="120dp"
         android:layout_height="48dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/style_for_button"
         android:onClick="onClick"
         android:text="Update"
@@ -47,7 +71,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableOutput" />
+        app:layout_constraintTop_toBottomOf="@+id/scroleOutput" />
 
     <Button
         android:id="@+id/buttonBackPage"
@@ -64,5 +88,17 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonOutput"
-        app:layout_constraintVertical_bias="0.317" />
+        app:layout_constraintVertical_bias="0.089" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="212dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="68dp"
+        android:entries="@array/sort"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

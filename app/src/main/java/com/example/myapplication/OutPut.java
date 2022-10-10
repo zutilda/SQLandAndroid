@@ -3,20 +3,29 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.Parcel;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Base64;
 
 public class OutPut extends AppCompatActivity implements View.OnClickListener  {
 
@@ -24,6 +33,10 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
     Button buttonOutput;
     Connection connection;
     String ConnectionResult;
+    EditText searchHat;
+    Spinner spinner;
+
+    public static int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +44,8 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
         setContentView(R.layout.activity_out_put);
         buttonBackPage =findViewById(R.id.buttonBackPage);
         buttonOutput =findViewById(R.id.buttonOutput);
+        searchHat=findViewById(R.id.searchHat);
+        spinner =findViewById(R.id.spinner);
         GetTable();
     }
 
@@ -48,7 +63,33 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
 
         }
     }
+    public static String encodeImage(Bitmap bitmap) {
+        int prevW = 1000;
+        int prevH = bitmap.getHeight() * prevW / bitmap.getWidth();
+        int a = bitmap.getHeight();
+        int c = bitmap.getWidth();
 
+        Bitmap b = Bitmap.createScaledBitmap(bitmap, prevW, prevH, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        b.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return Base64.getEncoder().encodeToString(bytes);
+        }
+        return "";
+    }
+
+    private Bitmap getImgBitmap(String encodedImg) {
+        if (!encodedImg.equals("null")) {
+            byte[] bytes = new byte[0];
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                bytes = Base64.getDecoder().decode(encodedImg);
+            }
+            return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        }
+        return BitmapFactory.decodeResource(OutPut.this.getResources(),
+                R.drawable.cap);
+    }
     public void GetTable() {
 
         try {
@@ -57,7 +98,18 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
             connection = connectionHelper.connectionClass();
 
             if (connection != null) {
-                String query = "Select * From Hat";
+                String query = "Select * From Hat WHERE title LIKE '%" + searchHat.getText().toString() + "%'";
+                switch (spinner.getSelectedItemPosition()) {
+                    case 0:
+                        break;
+                    case 1:
+                        query += " ORDER BY title DESC";
+                        break;
+                    case 2:
+                        query += " ORDER BY title ASC";
+                        break;
+
+                }
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(query);
                 TableLayout tableOutput = findViewById(R.id.tableOutput);
@@ -66,13 +118,24 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
                 while (resultSet.next()) {
                     TableRow outputROW = new TableRow(this);
                     outputROW.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                    TableRow.LayoutParams params = new TableRow.LayoutParams(200, 200);
+
+
+
+                    Button buttonDelete = new Button(this);
+                    buttonDelete.setOnClickListener(this);
 
                     TextView ID = new TextView(this);
                     params.weight = 1.0f;
                     ID.setLayoutParams(params);
                     ID.setText(resultSet.getString(1));
                     outputROW.addView(ID);
+
+                    ImageView imageView = new ImageView(this);
+                    params.weight = 1.0f;
+                    imageView.setLayoutParams(params);
+                    imageView.setImageBitmap(getImgBitmap(resultSet.getString(5)));
+                    outputROW.addView(imageView);
 
                     TextView Title = new TextView(this);
                     params.weight = 2.0f;
@@ -92,15 +155,51 @@ public class OutPut extends AppCompatActivity implements View.OnClickListener  {
                     Cost.setText(resultSet.getString(4));
                     outputROW.addView(Cost);
 
+                    buttonDelete.setText("del");
+                    buttonDelete.setId(Integer.parseInt(resultSet.getString(1)));
+                    buttonDelete.setOnClickListener((view -> {
+                        DeleteRow(buttonDelete.getId());
+                    }));
+
+                    outputROW.addView(buttonDelete);
+                    outputROW.setId(Integer.parseInt(resultSet.getString(1)));
+                    outputROW.setOnClickListener((view -> {
+
+                        id = outputROW.getId();
+                        startActivity(new Intent(OutPut.this, MainActivity.class));
+
+                    }));
+
                     tableOutput.addView(outputROW);
                 }
             } else {
                 ConnectionResult = "Check Connection";
             }
         } catch (Exception ex) {
-            Toast.makeText(this, "Ошибка!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Ошибка подключения!", Toast.LENGTH_LONG).show();
         }
     }
+    public  void DeleteRow(int ID)
+    {
+        try {
+            ConnectionHelper connectionHelper = new ConnectionHelper();
+
+            connection = connectionHelper.connectionClass();
+            if (connection != null) {
+                String query = "DELETE FROM Hat WHERE id = " + ID;
+                Statement statement = connection.createStatement();
+                statement.executeUpdate(query);
+
+                Toast.makeText(this, "Товар удалён", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Проверьте подключение!", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception ex) {
+            Toast.makeText(this, "Ошибка при удалении!", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
     /* //открытие
         imageView.setOnClickListener(v -> {
